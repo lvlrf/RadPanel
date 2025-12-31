@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  db:
+    image: postgres:15-alpine
+    container_name: radpanel-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-radpanel}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME:-radpanel}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./backups:/backups
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-radpanel}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    restart: always
+
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: radpanel-backend
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-radpanel}:${DB_PASSWORD}@db:5432/${DB_NAME:-radpanel}
+      DEBUG: "false"
+      SECRET_KEY: ${SECRET_KEY}
+      MARZBAN_URL: ${MARZBAN_URL}
+      MARZBAN_USERNAME: ${MARZBAN_USERNAME}
+      MARZBAN_PASSWORD: ${MARZBAN_PASSWORD}
+      HTTP_PROXY: ${HTTP_PROXY:-}
+      HTTPS_PROXY: ${HTTPS_PROXY:-}
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+
+  # React Frontend (Production build served by Nginx)
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: radpanel-frontend
+    restart: always
+
+  # Nginx Reverse Proxy
+  nginx:
+    image: nginx:alpine
+    container_name: radpanel-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./docker/nginx/ssl:/etc/nginx/ssl:ro
+      - uploads_data:/uploads:ro
+    depends_on:
+      - backend
+      - frontend
+    restart: always
+
+volumes:
+  postgres_data:
+  uploads_data:

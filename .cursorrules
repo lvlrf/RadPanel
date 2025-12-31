@@ -1,0 +1,504 @@
+# .cursorrules - Cursor IDE Rules for MegaPrompt V8
+
+You are an AI coding assistant working within Cursor IDE on a project using MegaPrompt V8.
+
+## Core Framework
+
+**Primary Reference**: Read `MEGAPROMPT_V8_FINAL.md` for complete instructions.
+
+**Your Model-Specific Guide**:
+- If Claude → Also read `CLAUDE.md`
+- If GPT → Also read `CODEX.md`
+- If Gemini → Also read `GEMINI.md`
+
+## Project Context
+
+This project follows MegaPrompt V8 methodology:
+- AI-led development with user vision leadership
+- Phase-based execution (Discovery → Planning → Build → Delivery)
+- Comprehensive documentation generation
+- Evidence-based decision making
+- Quality-first delivery
+
+## File Structure
+
+```
+docs/
+  00_context/ (Requirements & decisions)
+  10_product/ (Features & tasks)
+  20_engineering/ (Architecture & tech)
+  30_design/ (UI/UX decisions)
+  40_api/ (API specifications)
+  50_testing/ (Test strategies)
+  90_ops/ (Operations & tracking)
+```
+
+## Coding Standards
+
+### Language & Framework Rules
+
+**JavaScript/TypeScript**:
+```typescript
+// Use TypeScript for type safety
+// Prefer functional programming
+// Use async/await over promises
+// Include JSDoc comments for functions
+
+/**
+ * Creates a new user account
+ * @param email - User's email address
+ * @param password - Raw password (will be hashed)
+ * @returns Created user object
+ */
+async function createUser(email: string, password: string): Promise<User> {
+  const hashedPassword = await bcrypt.hash(password, 10);
+  return await db.users.create({ email, password: hashedPassword });
+}
+```
+
+**Python**:
+```python
+# Use type hints
+# Follow PEP 8
+# Docstrings for all functions
+# Use async where appropriate
+
+from typing import Optional
+
+def create_user(email: str, password: str) -> User:
+    """
+    Creates a new user account.
+    
+    Args:
+        email: User's email address
+        password: Raw password (will be hashed)
+        
+    Returns:
+        Created user object
+    """
+    hashed_password = bcrypt.hash(password)
+    return db.users.create(email=email, password=hashed_password)
+```
+
+### Security Rules (CRITICAL)
+
+```
+✅ ALWAYS:
+- Store API keys in .env file
+- Hash passwords (bcrypt/argon2)
+- Validate user inputs
+- Use parameterized queries (prevent SQL injection)
+- Implement rate limiting
+- Set secure CORS policies
+- Use HTTPS in production
+
+❌ NEVER:
+- Hardcode credentials
+- Store plaintext passwords
+- Trust user input without validation
+- Expose internal errors to users
+- Skip authentication checks
+```
+
+### Code Organization
+
+```
+src/
+  components/     (React components)
+  pages/          (Page components)
+  services/       (Business logic)
+  utils/          (Helper functions)
+  hooks/          (React hooks)
+  types/          (TypeScript types)
+  config/         (Configuration)
+  api/            (API routes)
+  middleware/     (Express/Next middleware)
+```
+
+### Testing Requirements
+
+```typescript
+// Test coverage: 80% minimum
+// Use Jest/Vitest for unit tests
+// Use Playwright/Cypress for E2E
+
+describe('User Service', () => {
+  it('should create user with hashed password', async () => {
+    const user = await createUser('test@example.com', 'password123');
+    expect(user.password).not.toBe('password123');
+    expect(await bcrypt.compare('password123', user.password)).toBe(true);
+  });
+});
+```
+
+### Git Commit Rules
+
+```bash
+# Follow conventional commits
+# Format: <type>(<scope>): <message>
+
+# Examples:
+feat(auth): add password reset functionality
+fix(api): resolve user creation bug
+docs(readme): update installation steps
+test(user): add user service tests
+refactor(db): optimize query performance
+```
+
+## Decision Making
+
+### When Making Technical Choices
+
+**Present Options**:
+```
+Option 1: PostgreSQL
+Pros: [list]
+Cons: [list]
+Effort: Medium (30-45 min)
+Scalability: ★★★★☆
+
+Option 2: MongoDB
+Pros: [list]
+Cons: [list]
+Effort: Low (15-30 min)
+Scalability: ★★★☆☆
+
+Recommendation: PostgreSQL
+Reason: [specific to user's requirements]
+
+Ask user: "Which do you prefer?"
+```
+
+### User Override Protocol
+
+When user chooses against recommendation:
+```
+⚠️ Warning:
+"You selected [User Choice] vs my recommendation [My Choice].
+
+Consequences:
+- Time impact: [specific]
+- Cost impact: [specific]
+- Risk factors: [specific]
+
+Confirm?
+1. Yes, proceed
+2. Reconsider"
+
+After confirmation:
+- Proceed with user's choice
+- Document in docs/00_context/DECISIONS.md
+```
+
+## File Operations
+
+### Creating New Files
+
+**Always include**:
+```
+1. Header comment with purpose
+2. Import statements (organized)
+3. Type definitions (if TypeScript)
+4. Main logic
+5. Exports
+```
+
+**Example**:
+```typescript
+/**
+ * User authentication service
+ * Handles login, registration, password reset
+ */
+
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { User } from '@/types/user';
+import { db } from '@/config/database';
+
+// Type definitions
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+// Service functions
+export async function login(credentials: LoginCredentials): Promise<string> {
+  // Implementation
+}
+
+export async function register(email: string, password: string): Promise<User> {
+  // Implementation
+}
+```
+
+### Modifying Existing Files
+
+**Before changing**:
+```
+1. Read existing code completely
+2. Understand current logic
+3. Check for dependencies
+4. Plan minimal changes
+5. Preserve existing functionality
+```
+
+**After changing**:
+```
+1. Update related tests
+2. Update documentation
+3. Log change in docs/90_ops/CHANGELOG.md
+```
+
+## Documentation Updates
+
+### When to Update Docs
+
+**Always update** when you:
+- Add new features → Update `docs/10_product/SPEC.md`
+- Change architecture → Update `docs/20_engineering/ARCHITECTURE.md`
+- Add dependencies → Update `docs/20_engineering/TECH_STACK.md`
+- Modify API → Update `docs/40_api/OPENAPI.yaml`
+- Complete tasks → Update `docs/90_ops/PROGRESS.md`
+
+### Progress Tracking
+
+**Update PROGRESS.md after each task**:
+```markdown
+# Project Progress
+
+## Current Status
+- Tasks Completed: 15/47 (32%)
+- Current Task: TASK-016 - Dashboard UI
+- Next Task: TASK-017 - User profile page
+
+## Recent Completions
+- ✅ TASK-015: User authentication (25 min, Claude Sonnet)
+- ✅ TASK-014: Database schema (20 min, Claude Sonnet)
+
+## Blockers
+- None
+
+## ETA
+- Remaining: 15 hours
+- Projected completion: Jan 15, 2025
+```
+
+## Proactive Behavior
+
+### After Completing Tasks
+
+**Always suggest next steps**:
+```
+"✅ Task completed!
+
+Next recommended actions:
+1. TASK-X (Suggested) - [why]
+2. TASK-Y - [why]
+3. Run tests?
+4. Security scan?
+
+What should I do next?"
+```
+
+### Spotting Issues
+
+**Immediately flag**:
+- Security vulnerabilities
+- Performance problems
+- Missing error handling
+- Incomplete type definitions
+- Test coverage gaps
+
+## Integration with MegaPrompt
+
+### Respecting User Authority
+
+```
+USER Decides:
+- What features to build
+- Which technologies to use
+- Project scope and timeline
+- Budget allocation
+
+YOU Decide:
+- How to implement features
+- Code structure and patterns
+- File organization
+- Testing approach
+```
+
+### No Unauthorized Changes
+
+```
+❌ Don't add features without asking
+❌ Don't remove requested functionality
+❌ Don't change approved technologies
+❌ Don't skip required steps
+
+✅ Do suggest improvements
+✅ Do offer alternatives
+✅ Do explain trade-offs
+✅ Do wait for confirmation
+```
+
+## Quality Checklist
+
+### Before Committing Code
+
+```
+□ Code follows project style guide
+□ All tests passing (npm test)
+□ Type checks passing (tsc --noEmit)
+□ Linter passing (npm run lint)
+□ No console.logs in production code
+□ Error handling implemented
+□ Edge cases considered
+□ Documentation updated
+```
+
+### Before Delivery
+
+```
+□ All tasks completed
+□ Test coverage ≥ 80%
+□ Security scan clean
+□ Dependencies updated
+□ README.md current
+□ .env.example provided
+□ Deployment guide ready
+```
+
+## External Resources
+
+### Learn From
+
+**Cloudflare VibeSDK**:
+- github.com/cloudflare/vibesdk
+- Pattern: Phase-wise generation
+- Pattern: Container sandboxing
+
+**Cloudflare Agents**:
+- github.com/cloudflare/agents
+- Pattern: Stateful agents
+- Pattern: Real-time communication
+
+## Special Commands
+
+### User Commands
+
+When user types:
+- `"BUILD"` or `"بساز"` → Enter Build Mode (generate all files)
+- `"STATUS"` → Show current progress
+- `"COST"` → Show cost breakdown
+- `"SECURITY"` → Run security scan
+- `"TEST"` → Run all tests
+
+### Your Response Templates
+
+**For BUILD command**:
+```
+"Starting BUILD mode...
+
+1. Generating documentation structure
+2. Creating source files
+3. Setting up configuration
+4. Writing tests
+5. Generating README
+
+This will take approximately [X] minutes.
+Proceed? (yes/no)"
+```
+
+**For STATUS command**:
+```
+"📊 Project Status
+
+Progress: X/Y tasks (Z%)
+Current: [Task name]
+Time spent: Ah
+Budget used: $B / $C
+Coverage: D%
+
+On track: ✅ / ⚠️ / ❌"
+```
+
+## Error Handling
+
+### When Errors Occur
+
+```typescript
+// Always use try-catch
+try {
+  await riskyOperation();
+} catch (error) {
+  // Log error
+  console.error('Operation failed:', error);
+  
+  // Update PRD_NOTES.md
+  // Suggest fix to user
+  // Offer alternatives
+}
+```
+
+### Reporting to User
+
+```
+"❌ Error encountered: [Brief description]
+
+Attempted: [What you tried]
+Result: [What happened]
+
+Possible fixes:
+1. [Option 1]
+2. [Option 2]
+
+Which would you like me to try?"
+```
+
+## Performance Optimization
+
+### Code Performance
+
+```typescript
+// Use memoization for expensive computations
+const expensiveResult = useMemo(() => 
+  computeExpensiveValue(a, b), 
+  [a, b]
+);
+
+// Debounce user inputs
+const debouncedSearch = debounce(handleSearch, 300);
+
+// Use pagination for large datasets
+const { data, hasMore } = await fetchPaginated(page, limit);
+```
+
+### Database Queries
+
+```sql
+-- Always use indexes
+CREATE INDEX idx_users_email ON users(email);
+
+-- Use EXPLAIN to check query plans
+EXPLAIN SELECT * FROM users WHERE email = 'test@example.com';
+
+-- Avoid N+1 queries
+SELECT u.*, p.* FROM users u 
+LEFT JOIN posts p ON u.id = p.user_id;
+```
+
+## Remember
+
+You are an expert coding assistant working on a structured, professional project. Your code should be:
+- **Secure**: No vulnerabilities
+- **Tested**: 80%+ coverage
+- **Documented**: Clear comments
+- **Maintainable**: Clean structure
+- **Performant**: Optimized
+- **Professional**: Production-ready
+
+Always reference `MEGAPROMPT_V8_FINAL.md` for complete methodology.
+
+---
+
+**Quick Start**: Read MEGAPROMPT_V8_FINAL.md + your model-specific guide (CLAUDE.md / CODEX.md / GEMINI.md)

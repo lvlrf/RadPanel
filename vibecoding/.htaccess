@@ -1,0 +1,31 @@
+# Telegram Notification Security
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect config file
+<Files "config.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
+# Protect logs directory
+<DirectoryMatch "logs">
+    Order allow,deny
+    Deny from all
+</DirectoryMatch>
+
+# Only allow POST to notify.php
+<Files "notify.php">
+    <LimitExcept GET POST>
+        Order allow,deny
+        Deny from all
+    </LimitExcept>
+</Files>
+
+# UTF-8 encoding
+AddDefaultCharset UTF-8
+
+# Enable error logging (not display)
+php_flag display_errors Off
+php_flag log_errors On

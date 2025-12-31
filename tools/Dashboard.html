@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding - Project Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0f0f1e;
+            color: #fff;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4f 100%);
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .stat-card .icon {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .stat-card .label {
+            font-size: 0.9em;
+            opacity: 0.7;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-card .subvalue {
+            font-size: 0.85em;
+            opacity: 0.6;
+            margin-top: 5px;
+        }
+
+        .progress-section {
+            background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4f 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .progress-section h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+            font-size: 1.8em;
+        }
+
+        .progress-bar-container {
+            background: rgba(0,0,0,0.3);
+            border-radius: 50px;
+            height: 40px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            transition: width 1s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-bar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        .progress-details {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.9em;
+            opacity: 0.7;
+        }
+
+        .tasks-list {
+            background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4f 100%);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .tasks-list h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+            font-size: 1.8em;
+        }
+
+        .task-item {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            transition: all 0.3s ease;
+            border-left: 4px solid transparent;
+        }
+
+        .task-item:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .task-item.completed {
+            border-left-color: #4caf50;
+            opacity: 0.6;
+        }
+
+        .task-item.in-progress {
+            border-left-color: #ffc107;
+            animation: pulse 2s infinite;
+        }
+
+        .task-item.pending {
+            border-left-color: #666;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .task-status {
+            font-size: 1.5em;
+            margin-right: 15px;
+        }
+
+        .task-info {
+            flex: 1;
+        }
+
+        .task-id {
+            font-weight: bold;
+            color: #667eea;
+            margin-right: 10px;
+        }
+
+        .task-title {
+            font-size: 1.1em;
+        }
+
+        .task-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+            font-size: 0.85em;
+            opacity: 0.6;
+        }
+
+        .task-badge {
+            padding: 3px 10px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+        }
+
+        .badge-low {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge-medium {
+            background: #ff9800;
+            color: white;
+        }
+
+        .badge-high {
+            background: #f44336;
+            color: white;
+        }
+
+        .cost-tracker {
+            background: linear-gradient(135deg, #1e1e3f 0%, #2a2a4f 100%);
+            border-radius: 15px;
+            padding: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .cost-tracker h2 {
+            margin-bottom: 20px;
+            color: #667eea;
+            font-size: 1.8em;
+        }
+
+        .cost-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .cost-row:last-child {
+            border-bottom: none;
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #667eea;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid #667eea;
+        }
+
+        .budget-warning {
+            background: linear-gradient(135deg, #ff9800 0%, #f44336 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+            animation: blink 1.5s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        .budget-ok {
+            background: linear-gradient(135deg, #4caf50 0%, #66bb6a 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px;
+            opacity: 0.5;
+            font-size: 0.9em;
+        }
+
+        .refresh-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 50%;
+            font-size: 1.5em;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.5);
+            transition: all 0.3s ease;
+            color: white;
+        }
+
+        .refresh-btn:hover {
+            transform: scale(1.1) rotate(180deg);
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95) rotate(180deg);
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-card .value {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🚀 Vibe Coding Dashboard</h1>
+            <p>Real-time project monitoring</p>
+        </header>
+
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="icon">✅</div>
+                <div class="label">Completed Tasks</div>
+                <div class="value" id="completedTasks">0</div>
+                <div class="subvalue">of <span id="totalTasks">18</span> total</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">⏱️</div>
+                <div class="label">Time Elapsed</div>
+                <div class="value" id="timeElapsed">0h 0m</div>
+                <div class="subvalue">Est: <span id="estimatedTime">10h</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">💰</div>
+                <div class="label">Cost Spent</div>
+                <div class="value" id="costSpent">$0.00</div>
+                <div class="subvalue">Budget: <span id="budget">$25</span></div>
+            </div>
+
+            <div class="stat-card">
+                <div class="icon">🔢</div>
+                <div class="label">Tokens Used</div>
+                <div class="value" id="tokensUsed">0K</div>
+                <div class="subvalue">Est: <span id="estimatedTokens">900K</span></div>
+            </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="progress-section">
+            <h2>📊 Overall Progress</h2>
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progressBar" style="width: 0%;">
+                    <span id="progressPercent">0%</span>
+                </div>
+            </div>
+            <div class="progress-details">
+                <span><strong>Low:</strong> <span id="lowProgress">0/8</span></span>
+                <span><strong>Medium:</strong> <span id="mediumProgress">0/7</span></span>
+                <span><strong>High:</strong> <span id="highProgress">0/3</span></span>
+            </div>
+        </div>
+
+        <!-- Tasks List -->
+        <div class="tasks-list">
+            <h2>📋 Tasks Status</h2>
+            <div id="tasksList">
+                <!-- Tasks will be dynamically loaded here -->
+            </div>
+        </div>
+
+        <!-- Cost Tracker -->
+        <div class="cost-tracker">
+            <h2>💰 Cost Breakdown</h2>
+            <div class="cost-row">
+                <span>Low tasks (Sonnet):</span>
+                <span id="lowCost">$0.00</span>
+            </div>
+            <div class="cost-row">
+                <span>Medium tasks (Sonnet):</span>
+                <span id="mediumCost">$0.00</span>
+            </div>
+            <div class="cost-row">
+                <span>High tasks (Opus):</span>
+                <span id="highCost">$0.00</span>
+            </div>
+            <div class="cost-row">
+                <span>Testing & Deployment:</span>
+                <span id="deploymentCost">$0.00</span>
+            </div>
+            <div class="cost-row">
+                <span>💵 Total:</span>
+                <span id="totalCost">$0.00</span>
+            </div>
+            <div id="budgetStatus"></div>
+        </div>
+
+        <footer>
+            <p>Dashboard updates every 30 seconds • Click refresh button for manual update</p>
+            <p style="margin-top: 10px;">Last updated: <span id="lastUpdate">Never</span></p>
+        </footer>
+    </div>
+
+    <button class="refresh-btn" onclick="loadData()" title="Refresh">🔄</button>
+
+    <script>
+        // Sample data (in production, load from PRD_NOTES.md and COST_LOG.md)
+        let projectData = {
+            totalTasks: 18,
+            completedTasks: 0,
+            timeElapsed: "0h 0m",
+            estimatedTime: "10h",
+            costSpent: 0,
+            budget: 25,
+            tokensUsed: 0,
+            estimatedTokens: 900,
+            tasks: [
+                {id: "TASK-001", title: "Setup Project Structure", complexity: "L", status: "pending", time: "", cost: 0},
+                {id: "TASK-002", title: "Database Schema Design", complexity: "M", status: "pending", time: "", cost: 0},
+                {id: "TASK-003", title: "API Endpoints - User CRUD", complexity: "L", status: "pending", time: "", cost: 0},
+                {id: "TASK-004", title: "Authentication System", complexity: "H", status: "pending", time: "", cost: 0},
+                {id: "TASK-005", title: "Frontend Components", complexity: "M", status: "pending", time: "", cost: 0},
+            ]
+        };
+
+        function loadData() {
+            // In production: Parse PRD_NOTES.md and COST_LOG.md
+            // For now, use sample data
+            updateDashboard();
+        }
+
+        function updateDashboard() {
+            document.getElementById('completedTasks').textContent = projectData.completedTasks;
+            document.getElementById('totalTasks').textContent = projectData.totalTasks;
+            document.getElementById('timeElapsed').textContent = projectData.timeElapsed;
+            document.getElementById('estimatedTime').textContent = projectData.estimatedTime;
+            document.getElementById('costSpent').textContent = `$${projectData.costSpent.toFixed(2)}`;
+            document.getElementById('budget').textContent = `$${projectData.budget}`;
+            document.getElementById('tokensUsed').textContent = `${projectData.tokensUsed}K`;
+            document.getElementById('estimatedTokens').textContent = `${projectData.estimatedTokens}K`;
+
+            // Progress bar
+            const progress = (projectData.completedTasks / projectData.totalTasks) * 100;
+            document.getElementById('progressBar').style.width = `${progress}%`;
+            document.getElementById('progressPercent').textContent = `${Math.round(progress)}%`;
+
+            // Complexity progress
+            const lowCompleted = projectData.tasks.filter(t => t.complexity === 'L' && t.status === 'completed').length;
+            const mediumCompleted = projectData.tasks.filter(t => t.complexity === 'M' && t.status === 'completed').length;
+            const highCompleted = projectData.tasks.filter(t => t.complexity === 'H' && t.status === 'completed').length;
+            
+            document.getElementById('lowProgress').textContent = `${lowCompleted}/8`;
+            document.getElementById('mediumProgress').textContent = `${mediumCompleted}/7`;
+            document.getElementById('highProgress').textContent = `${highCompleted}/3`;
+
+            renderTasks();
+            updateCostBreakdown();
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleString();
+        }
+
+        function renderTasks() {
+            const tasksList = document.getElementById('tasksList');
+            tasksList.innerHTML = '';
+
+            projectData.tasks.forEach(task => {
+                const statusIcon = task.status === 'completed' ? '✅' : 
+                                 task.status === 'in-progress' ? '🔄' : '⏳';
+                
+                const taskItem = document.createElement('div');
+                taskItem.className = `task-item ${task.status}`;
+                taskItem.innerHTML = `
+                    <div class="task-status">${statusIcon}</div>
+                    <div class="task-info">
+                        <div>
+                            <span class="task-id">${task.id}</span>
+                            <span class="task-title">${task.title}</span>
+                            <span class="task-badge badge-${task.complexity.toLowerCase()}">${task.complexity}</span>
+                        </div>
+                        <div class="task-meta">
+                            ${task.time ? `<span>⏱️ ${task.time}</span>` : ''}
+                            ${task.cost > 0 ? `<span>💰 $${task.cost.toFixed(2)}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                tasksList.appendChild(taskItem);
+            });
+        }
+
+        function updateCostBreakdown() {
+            const lowCost = projectData.tasks.filter(t => t.complexity === 'L' && t.status === 'completed')
+                .reduce((sum, t) => sum + t.cost, 0);
+            const mediumCost = projectData.tasks.filter(t => t.complexity === 'M' && t.status === 'completed')
+                .reduce((sum, t) => sum + t.cost, 0);
+            const highCost = projectData.tasks.filter(t => t.complexity === 'H' && t.status === 'completed')
+                .reduce((sum, t) => sum + t.cost, 0);
+
+            document.getElementById('lowCost').textContent = `$${lowCost.toFixed(2)}`;
+            document.getElementById('mediumCost').textContent = `$${mediumCost.toFixed(2)}`;
+            document.getElementById('highCost').textContent = `$${highCost.toFixed(2)}`;
+            document.getElementById('totalCost').textContent = `$${projectData.costSpent.toFixed(2)}`;
+
+            const budgetStatus = document.getElementById('budgetStatus');
+            const remaining = projectData.budget - projectData.costSpent;
+            const percentUsed = (projectData.costSpent / projectData.budget) * 100;
+
+            if (percentUsed >= 90) {
+                budgetStatus.className = 'budget-warning';
+                budgetStatus.innerHTML = `⚠️ Warning: $${remaining.toFixed(2)} remaining (${(100-percentUsed).toFixed(0)}% left)`;
+            } else {
+                budgetStatus.className = 'budget-ok';
+                budgetStatus.innerHTML = `✅ On track: $${remaining.toFixed(2)} remaining`;
+            }
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(loadData, 30000);
+
+        // Initial load
+        loadData();
+    </script>
+</body>
+</html>

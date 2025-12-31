@@ -1,0 +1,15 @@
+# Logs
+logs/
+*.log
+
+# Configuration (contains sensitive tokens)
+config.php
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

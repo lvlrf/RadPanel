@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vibe Coding - Decision Comparison Tables</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #667eea;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .section-description {
+            font-size: 1.1em;
+            color: #666;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        thead {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9em;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #eee;
+        }
+
+        tbody tr:hover {
+            background: #f8f9ff;
+            transform: scale(1.02);
+            box-shadow: 0 4px 8px rgba(102, 126, 234, 0.1);
+            cursor: pointer;
+        }
+
+        tbody tr.recommended {
+            background: #e8f5e9;
+            font-weight: 600;
+        }
+
+        tbody tr.recommended:hover {
+            background: #c8e6c9;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+
+        .badge-recommended {
+            background: #4caf50;
+            color: white;
+        }
+
+        .badge-warning {
+            background: #ff9800;
+            color: white;
+        }
+
+        .badge-danger {
+            background: #f44336;
+            color: white;
+        }
+
+        .badge-info {
+            background: #2196f3;
+            color: white;
+        }
+
+        .stars {
+            color: #ffc107;
+            font-size: 1.2em;
+        }
+
+        .highlight-box {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .highlight-box h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+
+        .highlight-box p {
+            color: #856404;
+            line-height: 1.6;
+        }
+
+        .recommendation {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+            border: 2px solid #4caf50;
+        }
+
+        .recommendation h3 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 1.5em;
+        }
+
+        .recommendation ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .recommendation li {
+            padding: 8px 0;
+            padding-left: 30px;
+            position: relative;
+            color: #2e7d32;
+        }
+
+        .recommendation li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #4caf50;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .cost-calculator {
+            background: #f5f5f5;
+            padding: 30px;
+            border-radius: 10px;
+            margin: 30px 0;
+        }
+
+        .cost-calculator h3 {
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        .calculator-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .calculator-row:last-child {
+            border-bottom: none;
+            font-weight: bold;
+            font-size: 1.2em;
+            color: #667eea;
+            padding-top: 20px;
+            margin-top: 10px;
+            border-top: 2px solid #667eea;
+        }
+
+        footer {
+            background: #f5f5f5;
+            padding: 30px;
+            text-align: center;
+            color: #666;
+        }
+
+        .emoji {
+            font-size: 1.5em;
+            margin-right: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0;
+            }
+
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            th, td {
+                padding: 10px 8px;
+                font-size: 0.9em;
+            }
+
+            .section-title {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Vibe Coding Decision Tables</h1>
+            <p>Smart comparisons to help you make the best choices</p>
+        </header>
+
+        <div class="content">
+            <!-- Database Comparison -->
+            <section class="section">
+                <h2 class="section-title">💾 Database Selection</h2>
+                <p class="section-description">
+                    Choose the right database for your project based on scale, complexity, and budget.
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Database</th>
+                            <th>Setup Time</th>
+                            <th>Cost</th>
+                            <th>Scale</th>
+                            <th>Quality</th>
+                            <th>Best For</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>SQLite</strong></td>
+                            <td>10 min</td>
+                            <td><span class="badge badge-info">Free</span></td>
+                            <td><span class="stars">★☆☆☆☆</span></td>
+                            <td><span class="stars">★★★☆☆</span></td>
+                            <td>Prototypes, very small apps</td>
+                        </tr>
+                        <tr class="recommended">
+                            <td><strong>PostgreSQL</strong> <span class="badge badge-recommended">✓ Recommended</span></td>
+                            <td>30 min</td>
+                            <td><span class="badge badge-info">Free</span></td>
+                            <td><span class="stars">★★★★☆</span></td>
+                            <td><span class="stars">★★★★★</span></td>
+                            <td>Most projects, scalable apps</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Supabase</strong></td>
+                            <td>15 min</td>
+                            <td><span class="badge badge-info">Free*</span></td>
+                            <td><span class="stars">★★★★☆</span></td>
+                            <td><span class="stars">★★★★☆</span></td>
+                            <td>Need Auth + Storage + Database</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MongoDB</strong></td>
+                            <td>20 min</td>
+                            <td><span class="badge badge-info">Free*</span></td>
+                            <td><span class="stars">★★★☆☆</span></td>
+                            <td><span class="stars">★★★☆☆</span></td>
+                            <td>Flexible schema, document storage</td>
+                        </tr>
+                        <tr>
+                            <td><strong>MySQL</strong></td>
+                            <td>25 min</td>
+                            <td><span class="badge badge-info">Free</span></td>
+                            <td><span class="stars">★★★★☆</span></td>
+                            <td><span class="stars">★★★★☆</span></td>
+                            <td>Traditional web apps, hosting compatibility</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="recommendation">
+                    <h3>💡 Our Recommendation: PostgreSQL</h3>
+                    <ul>
+                        <li>Free and powerful</li>
+                        <li>SQL standard (future-proof)</li>
+                        <li>Excellent support in all languages</li>
+                        <li>Scales to millions of records</li>
+                        <li>Best balance of features and simplicity</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #2e7d32;">
+                        <strong>When to choose something else:</strong><br>
+                        → SQLite if very small project with no scale needs<br>
+                        → Supabase if you also need Auth + Storage (all-in-one)<br>
+                        → MongoDB if you need flexible/changing schema
+                    </p>
+                </div>
+            </section>
+
+            <!-- Model Execution Modes -->
+            <section class="section">
+                <h2 class="section-title">🤖 Model Execution Modes</h2>
+                <p class="section-description">
+                    Compare different ways to execute your 18-task project.
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Execution Mode</th>
+                            <th>Time</th>
+                            <th>Tokens</th>
+                            <th>Cost</th>
+                            <th>Quality</th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>All Sonnet</strong></td>
+                            <td>12h</td>
+                            <td>1.2M</td>
+                            <td>$18</td>
+                            <td><span class="stars">★★★☆☆</span></td>
+                            <td>Cheapest, but risky for complex tasks</td>
+                        </tr>
+                        <tr class="recommended">
+                            <td><strong>L/M: Sonnet, H: Opus</strong> <span class="badge badge-recommended">✓ Recommended</span></td>
+                            <td>10h</td>
+                            <td>900K</td>
+                            <td>$25</td>
+                            <td><span class="stars">★★★★☆</span></td>
+                            <td>Best balance of cost and quality</td>
+                        </tr>
+                        <tr>
+                            <td><strong>All Opus</strong></td>
+                            <td>8h</td>
+                            <td>1.5M</td>
+                            <td>$45</td>
+                            <td><span class="stars">★★★★★</span></td>
+                            <td>Best quality, expensive</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Multi-Agent (Parallel)</strong> <span class="badge badge-warning">Complex</span></td>
+                            <td>6h</td>
+                            <td>1.1M</td>
+                            <td>$30</td>
+                            <td><span class="stars">★★★★★</span></td>
+                            <td>Fastest, requires coordination</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="cost-calculator">
+                    <h3>📊 Cost Breakdown (Recommended Mode)</h3>
+                    <div class="calculator-row">
+                        <span>Low tasks (8) with Sonnet:</span>
+                        <span>$1.60</span>
+                    </div>
+                    <div class="calculator-row">
+                        <span>Medium tasks (7) with Sonnet:</span>
+                        <span>$7.00</span>
+                    </div>
+                    <div class="calculator-row">
+                        <span>High tasks (3) with Opus:</span>
+                        <span>$9.00</span>
+                    </div>
+                    <div class="calculator-row">
+                        <span>Testing & Deployment:</span>
+                        <span>$3-5</span>
+                    </div>
+                    <div class="calculator-row">
+                        <span><span class="emoji">💰</span> Total Estimated:</span>
+                        <span>$20-25</span>
+                    </div>
+                </div>
+
+                <div class="recommendation">
+                    <h3>💡 Our Recommendation: L/M with Sonnet, H with Opus</h3>
+                    <ul>
+                        <li>Best balance of cost and quality</li>
+                        <li>2 hours faster than all-Sonnet</li>
+                        <li>High quality for critical tasks (payments, auth)</li>
+                        <li>Only +$7 vs all-Sonnet, -$20 vs all-Opus</li>
+                        <li>Recommended for 99% of projects</li>
+                    </ul>
+                    <p style="margin-top: 15px; color: #2e7d32;">
+                        <strong>When to choose something else:</strong><br>
+                        → All Sonnet if budget is very tight (accept risk)<br>
+                        → All Opus if budget allows and quality is critical<br>
+                        → Multi-Agent if you're experienced and need speed
+                    </p>
+                </div>
+            </section>
+
+            <!-- Tools Recommendation by Scale -->
+            <section class="section">
+                <h2 class="section-title">🛠️ Tools Recommendation by Project Scale</h2>
+                <p class="section-description">
+                    Don't over-engineer or under-tool your project. Choose based on size.
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tool</th>
+                            <th>Small<br>(&lt;10 endpoints)</th>
+                            <th>Medium<br>(10-50 endpoints)</th>
+                            <th>Large<br>(50+ endpoints)</th>
+                            <th>Purpose</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="recommended">
+                            <td><strong>Git</strong></td>
+                            <td><span class="badge badge-recommended">✓ Essential</span></td>
+                            <td><span class="badge badge-recommended">✓ Essential</span></td>
+                            <td><span class="badge badge-recommended">✓ Essential</span></td>
+                            <td>Version control (always needed)</td>
+                        </tr>
+                        <tr class="recommended">
+                            <td><strong>OpenAPI.yaml</strong></td>
+                            <td><span class="badge badge-recommended">✓ Basic</span></td>
+                            <td><span class="badge badge-recommended">✓ Complete</span></td>
+                            <td><span class="badge badge-recommended">✓ Strict</span></td>
+                            <td>API specification</td>
+                        </tr>
+                        <tr class="recommended">
+                            <td><strong>Swagger UI</strong></td>
+                            <td><span class="badge badge-recommended">✓ Yes</span></td>
+                            <td><span class="badge badge-recommended">✓ Yes</span></td>
+                            <td><span class="badge badge-recommended">✓ Yes</span></td>
+                            <td>Interactive API docs</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Prism</strong></td>
+                            <td><span class="badge badge-danger">✗ Overhead</span></td>
+                            <td><span class="badge badge-recommended">✓ Useful</span></td>
+                            <td><span class="badge badge-recommended">✓ Essential</span></td>
+                            <td>Mock server for testing</td>
+                        </tr>
+                        <tr>
+                            <td><strong>openspec.dev</strong></td>
+                            <td><span class="badge badge-danger">✗ Overkill</span></td>
+                            <td><span class="badge badge-warning">⚠ Optional</span></td>
+                            <td><span class="badge badge-recommended">✓ Recommended</span></td>
+                            <td>Change management & tracking</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Dredd</strong></td>
+                            <td><span class="badge badge-danger">✗ Overkill</span></td>
+                            <td><span class="badge badge-warning">⚠ If critical</span></td>
+                            <td><span class="badge badge-recommended">✓ Essential</span></td>
+                            <td>Contract testing in CI/CD</td>
+                        </tr>
+                        <tr>
+                            <td><strong>CodeRabbit</strong></td>
+                            <td><span class="badge badge-danger">✗ Not needed</span></td>
+                            <td><span class="badge badge-warning">⚠ If budget</span></td>
+                            <td><span class="badge badge-recommended">✓ Recommended</span></td>
+                            <td>Automated code review</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="highlight-box">
+                    <h3>⚠️ Common Mistakes</h3>
+                    <p>
+                        <strong>Over-engineering:</strong> Using Dredd + openspec.dev for a 5-endpoint project wastes time and money.<br><br>
+                        <strong>Under-tooling:</strong> Building 50+ endpoints without Prism or contract testing leads to integration hell.<br><br>
+                        <strong>The right approach:</strong> Start minimal, add tools as you grow.
+                    </p>
+                </div>
+            </section>
+
+            <!-- Task Complexity Quick Reference -->
+            <section class="section">
+                <h2 class="section-title">🎯 Task Complexity Quick Reference</h2>
+                <p class="section-description">
+                    Use this to quickly label your tasks in TASKS.md
+                </p>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Complexity</th>
+                            <th>Time</th>
+                            <th>Cost</th>
+                            <th>Model</th>
+                            <th>Risk</th>
+                            <th>Examples</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>L (Low)</strong> <span class="badge badge-info">Simple</span></td>
+                            <td>15-45m</td>
+                            <td>$0.10-0.30</td>
+                            <td>Sonnet</td>
+                            <td><span class="stars">★☆☆☆☆</span></td>
+                            <td>CRUD, static pages, config</td>
+                        </tr>
+                        <tr>
+                            <td><strong>M (Medium)</strong> <span class="badge badge-warning">Moderate</span></td>
+                            <td>45m-2h</td>
+                            <td>$0.30-1.50</td>
+                            <td>Sonnet</td>
+                            <td><span class="stars">★★★☆☆</span></td>
+                            <td>Business logic, validation, integration</td>
+                        </tr>
+                        <tr>
+                            <td><strong>H (High)</strong> <span class="badge badge-danger">Complex</span></td>
+                            <td>2-4h</td>
+                            <td>$1.50-4.00</td>
+                            <td>Opus</td>
+                            <td><span class="stars">★★★★★</span></td>
+                            <td>Payments, auth, security, concurrency</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div class="recommendation">
+                    <h3>🚨 Automatic High (H) Complexity</h3>
+                    <p style="margin-bottom: 15px; color: #2e7d32;">If ANY of these apply, mark as High:</p>
+                    <ul>
+                        <li>Involves money or payments</li>
+                        <li>Handles passwords or authentication</li>
+                        <li>Modifies production database schema</li>
+                        <li>Implements security features</li>
+                        <li>Processes sensitive data (PII, health, financial)</li>
+                        <li>Involves concurrency or race conditions</li>
+                        <li>Critical for system stability</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <footer>
+            <p><strong>Vibe Coding Decision Tables</strong> v1.0</p>
+            <p style="margin-top: 10px;">Last Updated: December 29, 2024</p>
+            <p style="margin-top: 10px; opacity: 0.7;">
+                These tables are designed to help you make informed decisions quickly.<br>
+                When in doubt, choose the safer option. ✅
+            </p>
+        </footer>
+    </div>
+
+    <script>
+        // Add interactive highlighting on click
+        document.querySelectorAll('tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                // Remove previous highlights
+                document.querySelectorAll('tbody tr').forEach(r => {
+                    r.style.borderLeft = 'none';
+                });
+                
+                // Highlight clicked row
+                this.style.borderLeft = '5px solid #667eea';
+                
+                // Scroll to top of table smoothly
+                this.closest('table').scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'nearest' 
+                });
+            });
+        });
+
+        // Log for analytics (optional)
+        console.log('Vibe Coding Decision Tables loaded successfully! 🎉');
+    </script>
+</body>
+</html>

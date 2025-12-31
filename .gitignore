@@ -1,0 +1,28 @@
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+vibecoding/config.php
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# Python
+__pycache__/
+*.pyc
+venv/
+
+# Project specific
+docs/**/PRD_NOTES.md
+docs/**/COST_LOG.md
+docs/**/CHANGELOG.md

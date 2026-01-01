@@ -11,6 +11,14 @@ import os
 from app.config import settings
 from app.database import engine, Base
 from app.api import auth, agents, plans, payments, payment_methods, orders, marzban, reports, users
+from app.jobs.scheduler import start_scheduler, stop_scheduler
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(name)s - %(levelname)s - %(message)s'
+)
 
 
 @asynccontextmanager
@@ -23,9 +31,13 @@ async def lifespan(app: FastAPI):
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
 
+    # Start background jobs
+    start_scheduler()
+
     yield
 
     # Shutdown
+    stop_scheduler()
     await engine.dispose()
 
 
